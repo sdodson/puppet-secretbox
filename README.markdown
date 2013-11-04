@@ -1,64 +1,72 @@
 # secretbox
 
-####Table of Contents
+## Overview
 
-1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with [secretbox]](#setup)
-    * [What [secretbox] affects](#what-[modulename]-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with [secretbox]](#beginning-with-[secretbox])
-4. [Usage - Configuration options and additional functionality](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+Storing passwords in your puppet manifests is a Bad Idea™. Generating random
+values for your passwords is a Good Idea. However, a plain random function will
+change every time you run it, quickly breaking things. How can you fix that?
 
-##Overview
+Hopefully, with secretbox, you shouldn't have to worry.
 
-A one-maybe-two sentence summary of what the module does/what problem it solves. This is your 30 second elevator pitch for your module. Consider including OS/Puppet version it works with.       
+## Setup
 
-##Module Description
+Make sure [pluginsync] is enabled, as this is a custom puppet function.
+Otherwise, install the module as you would any other and you should be good to
+go.
 
-If applicable, this section should have a brief description of the technology the module integrates with and what that integration enables. This section should answer the questions: "What does this module *do*?" and "Why would I use it?"
-    
-If your module has a range of functionality (installation, configuration, management, etc.) this is the time to mention it.
+[pluginsync]: http://docs.puppetlabs.com/guides/plugins_in_modules.html#enabling-pluginsync
 
-##Setup
+## Usage
 
-###What [secretbox] affects
+[secretbox] defines a custom "return value" function for puppet, so you can use
+it on the right side of any variable assignment, parameter list, if statement,
+etc. For example:
 
-* A list of files, packages, services, or operations that the module will alter, impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form. 
+    $mysql_root_password = secretbox('mysql_root_password')
 
-###Setup Requirements **OPTIONAL**
+Will set the variable `$mysql_root_password` to the value stored associated with
+the index "mysql_root_password".
 
-If your module requires anything extra before setting up (pluginsync enabled, etc.), mention it here. 
-  
-###Beginning with [secretbox]  
+The first time `secretbox(index)` is called on a node that doesn't have a value
+for 'index', it will be randomly generated. The random value will be written to
+disk. Any subsequent calls to secretbox with the same index will return the
+pre-computed value and will not generate a new secret.
 
-The very basic steps needed for a user to get the module up and running. 
+Each node has it's own unique "box", and does not share it's indexes or values
+with other nodes. All calls to secretbox with the same index on a given node are
+guaranteed to return the same value.
 
-If your most recent release breaks compatibility or requires particular steps for upgrading, you may wish to include an additional section here: Upgrading (For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+## Reference
 
-##Usage
+### secretbox
+Requires an index be passed as the first parameter. This index, along with the
+node's FQDN will be used to uniquely identify a secret. If the secret doesn't
+exist prior to the call, it will be generated. In this instance, secretbox can
+accept a second argument, which specifies the length of the randomly generated
+value. If the second value is left unspecified, it defaults to 32 characters
+long.
 
-Put the classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here. 
+The generated value can contain any printable ASCII value (character codes 32
+through 126), excluding single quote ('), double quotes ("), forward slash (/)
+and hash (#).
 
-##Reference
+Upon generation, the value is saved to a file named the passed index. The file
+is stored in a directory named after the FQDN. This directory is then stored
+within the 'secretbox' directory, underneath Puppet's 'vardir'. In practice,
+a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
 
-Here, list the classes, types, providers, facts, etc contained in your module. This section should include all of the under-the-hood workings of your module so people know what the module is touching on their system but don't need to mess with things. (We are working on automating this section!)
+- *Type*: rvalue
 
-##Limitations
+## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+Secretbox does nothing to prevent additional snooping on the files. It's assumed
+the directory in which it stores it's files (usually
+`/var/lib/puppet/secretbox`) is adequately protected. Default installations of
+puppet should be fine, as `/var/lib/puppet` is already protected.
 
-##Development
+## Development
 
-Since your module is awesome, other users will want to play with it. Let them know what the ground rules for contributing are.
-
-##Release Notes/Contributors/Etc **Optional**
-
-If you aren't using changelog, put your release notes here (though you should consider using changelog). You may also add any additional sections you feel are necessary or important to include here. Please use the `## ` header. 
+Pull requests are appreciated. If you do want to contribute to this project,
+make sure all tests pass. Also, be kinder rather than meaner.
 
 [secretbox]: https://github.com/evaryont/puppet-secretbox

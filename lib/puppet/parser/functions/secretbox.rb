@@ -1,8 +1,25 @@
+# Define the secretbox method; see README for more information and usage.
 module Puppet::Parser::Functions
-  newfunction(:secretbox, :type => :rvalue) do |args|
+  newfunction(:secretbox, :type => :rvalue, :arity => -2, :doc => <<-eodoc) do |args|
+Requires an index be passed as the first parameter. This index, along with the
+node's FQDN will be used to uniquely identify a secret. If the secret doesn't
+exist prior to the call, it will be generated. In this instance, secretbox can
+accept a second argument, which specifies the length of the randomly generated
+value. If the second value is left unspecified, it defaults to 32 characters
+long.
+
+The generated value can contain any printable ASCII value (character codes 32
+through 126), excluding single quote ('), double quotes ("), forward slash (/)
+and hash (#).
+
+Upon generation, the value is saved to a file named the passed index. The file
+is stored in a directory named after the FQDN. This directory is then stored
+within the 'secretbox' directory, underneath Puppet's 'vardir'. In practice,
+a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
+  eodoc
     # There must be a key passed as the first argument, which is used to index
     # the generated value
-    raise Puppet::ParseError, "Missing persistance key" if args[0].empty?
+    fail Puppet::ParseError, 'Missing persistance index' if args[0].empty?
 
     # Where the files are stored between runs. This directory should be
     # locked-down, permissions-wise.
@@ -23,7 +40,7 @@ module Puppet::Parser::Functions
       # Otherwise, generate a string
       length = args[1] || 32
       # We use all ASCII values 32 through 126, excluding a few: ' " # /
-      characters = (32..126).to_a - [35,34,39,47]
+      characters = (32..126).to_a - [35, 34, 39, 47]
 
       password = SecureRandom.random_bytes(length).each_char.map do |char|
         characters[(char.ord % characters.length)].chr

@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.3.5)
+    ast (1.1.0)
     backports (3.3.5)
     builder (3.2.2)
     coderay (1.0.9)
@@ -44,6 +45,10 @@ GEM
     net-ssh (2.7.0)
     netrc (0.7.7)
     nokogiri (1.5.10)
+    parser (2.0.0)
+      ast (~> 1.1)
+      slop (~> 3.4, >= 3.4.5)
+    powerpack (0.0.9)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -67,6 +72,7 @@ GEM
       rspec-puppet (>= 0.1.1)
     pusher-client (0.4.0)
       websocket (~> 1.0.0)
+    rainbow (1.1.4)
     rake (10.1.0)
     rbvmomi (1.6.0)
       builder
@@ -95,6 +101,10 @@ GEM
       systemu (~> 2.5)
     rspec-system-puppet (2.2.1)
       rspec-system (~> 2.0)
+    rubocop (0.14.1)
+      parser (~> 2.0)
+      powerpack (~> 0.0.6)
+      rainbow (>= 1.1.4)
     slop (3.4.6)
     systemu (2.5.2)
     travis (1.5.8)
@@ -129,6 +139,7 @@ DEPENDENCIES
   rake
   rspec-puppet
   rspec-system-puppet
+  rubocop
   travis
   travis-lint
   vagrant-wrapper

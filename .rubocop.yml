@@ -1,0 +1,16 @@
+AllCops:
+  Includes:
+    - Rakefile
+    - lib/**
+  Excludes:
+    - bin/**
+    - manifests/**
+
+LineLength:
+  Max: 120
+
+HashSyntax:
+  EnforcedStyle: hash_rockets
+
+Lambda:
+  Enabled: false

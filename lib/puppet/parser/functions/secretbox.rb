@@ -23,7 +23,7 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
 
     # Where the files are stored between runs. This directory should be
     # locked-down, permissions-wise.
-    persistance_dir = File.join(Puppet[:vardir], 'randpersist', lookupvar('fqdn'))
+    persistance_dir = File.join(Puppet[:vardir], 'secretbox', lookupvar('fqdn'))
     # The individual file that actually stores the contents
     persistance_file = File.join(persistance_dir, args[0])
 
@@ -35,7 +35,7 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
 
     if File.exists? persistance_file
       # The file exists, assume it's contents are what we wanted.
-      open(persistance_file).read.strip
+      open(persistance_file).read.chomp
     else
       # Otherwise, generate a string
       length = args[1] || 32

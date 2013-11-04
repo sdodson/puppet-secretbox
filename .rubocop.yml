@@ -5,6 +5,7 @@ AllCops:
   Excludes:
     - bin/**
     - manifests/**
+    - spec/fixtures/**
 
 LineLength:
   Max: 120

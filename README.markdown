@@ -1,4 +1,5 @@
 # secretbox
+[![Build Status](https://travis-ci.org/evaryont/puppet-secretbox.png?branch=master)](https://travis-ci.org/evaryont/puppet-secretbox)
 
 ## Overview
 

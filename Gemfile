@@ -11,4 +11,4 @@ gem 'puppet-syntax'
 gem 'puppet', ENV['PUPPET_VERSION'] || '~> 3.3.0'
 gem 'vagrant-wrapper'
 gem 'puppet-blacksmith'
-gem 'rubocop'
+gem 'rubocop', :platforms => [:ruby_19, :ruby_20]

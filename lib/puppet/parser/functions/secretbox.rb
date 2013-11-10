@@ -43,7 +43,12 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
       characters = (32..126).to_a - [35, 34, 39, 47]
 
       password = SecureRandom.random_bytes(length).each_char.map do |char|
-        characters[(char.ord % characters.length)].chr
+        begin
+          character_code = char.ord
+        rescue NoMethodError # For Ruby 1.8 compatibility, which stock puppet on RHEL runs on :(
+          character_code = char[0]
+        end
+        characters[(character_code % characters.length)].chr
       end.join
 
       # Save the generated string to a file so that it's the same in subsequent

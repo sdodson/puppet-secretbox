@@ -3,7 +3,8 @@ require 'spec_helper_system'
 describe 'basic tests' do
   it 'class should work without errors' do
     pp = <<-EOS
-      class { 'secretbox': }
+      $secretbox_check = secretbox('dummy_check')
+      notify { "${secretbox_check}": }
     EOS
 
     puppet_apply(pp) do |r|

@@ -1,6 +1,6 @@
 # Define the secretbox method; see README for more information and usage.
 module Puppet::Parser::Functions
-  newfunction(:secretbox, :type => :rvalue, :arity => -2, :doc => <<-eodoc) do |args|
+  newfunction(:secretbox, :type => :rvalue, :doc => <<-eodoc) do |args|
 Requires an index be passed as the first parameter. This index, along with the
 node's FQDN will be used to uniquely identify a secret. If the secret doesn't
 exist prior to the call, it will be generated. In this instance, secretbox can
@@ -19,7 +19,7 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
   eodoc
     # There must be a key passed as the first argument, which is used to index
     # the generated value
-    fail Puppet::ParseError, 'Missing persistance index' if args[0].empty?
+    fail Puppet::ParseError, 'Missing persistance index' if args[0].nil?
 
     # Where the files are stored between runs. This directory should be
     # locked-down, permissions-wise.
@@ -42,6 +42,7 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
       # We use all ASCII values 32 through 126, excluding a few: ' " # /
       characters = (32..126).to_a - [35, 34, 39, 47]
 
+      require 'securerandom'
       password = SecureRandom.random_bytes(length).each_char.map do |char|
         begin
           character_code = char.ord

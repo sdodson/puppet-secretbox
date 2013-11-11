@@ -2,8 +2,6 @@ require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 require 'rspec-system/rake_task'
-require 'puppet_blacksmith/rake_tasks'
-require 'rubocop/rake_task'
 
 PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
 PuppetLint.configuration.fail_on_warnings = true
@@ -22,7 +20,19 @@ exclude_paths = [
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
-Rubocop::RakeTask.new
+begin
+  require 'rubocop/rake_task'
+  Rubocop::RakeTask.new
+rescue LoadError
+  task :rubocop do
+    puts "Rubocop not installed!"
+  end
+end
+
+begin
+  require 'puppet_blacksmith/rake_tasks'
+rescue LoadError
+end
 
 desc 'Run syntax, lint, rubocop, and spec tests.'
 task :test => [:syntax, :lint, :rubocop, :spec]

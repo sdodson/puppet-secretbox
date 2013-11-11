@@ -10,14 +10,11 @@ describe 'the secretbox function' do
   end
 
   it 'should raise a ParseError if there is less than 1 argument' do
-    lambda { scope.function_secretbox([]) }.should raise_error(ArgumentError)
+    lambda { scope.function_secretbox([]) }.should raise_error(Puppet::ParseError)
   end
 
   def secretbox(index)
-    scope = Puppet::Parser::Scope.new_for_test_harness('localhost')
-    libdir = Puppet[:libdir]
-    Puppet.stubs(:[]).with(:vardir).returns(SECRETS_FIXTURES_DIR)
-    Puppet.stubs(:[]).with(:libdir).returns(libdir)
+    Puppet[:vardir] = SECRETS_FIXTURES_DIR
     scope.stubs(:lookupvar).with('fqdn').returns('localhost')
 
     scope.function_secretbox([index])

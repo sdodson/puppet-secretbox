@@ -22,16 +22,16 @@ PuppetSyntax.exclude_paths = exclude_paths
 
 begin
   require 'rubocop/rake_task'
-  Rubocop::RakeTask.new
+  RuboCop::RakeTask.new
 rescue LoadError
   task :rubocop do
-    puts "Rubocop not installed!"
+    puts 'Rubocop not installed!'
   end
 end
 
 begin
   require 'puppet_blacksmith/rake_tasks'
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
 desc 'Run syntax, lint, rubocop, and spec tests.'

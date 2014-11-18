@@ -33,16 +33,16 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
       FileUtils.mkdir_p persistance_dir
     end
 
-    if File.exists? persistance_file
+    if File.exist? persistance_file
       # The file exists, assume it's contents are what we wanted.
       open(persistance_file).read.chomp
     else
       # Otherwise, generate a string
       require 'securerandom'
       if args[1] == nil
-        length=32
+        length = 32
       else
-        length=args[1].to_i
+        length = args[1].to_i
       end
       if args[2] == nil
         sr_method = 'legacy'
@@ -62,7 +62,7 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
         end.join
       else
         begin
-            password = SecureRandom.send(sr_method,length)
+          password = SecureRandom.send(sr_method, length)
         rescue NoMethodError # They specified a SecureRandom method that doesn't exist
           raise NoMethodError, "Please see You have specified a SecureRandom method that doesn't exist"
         end
@@ -81,4 +81,3 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
     end
   end
 end
-

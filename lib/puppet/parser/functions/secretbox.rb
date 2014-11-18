@@ -38,19 +38,35 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
       open(persistance_file).read.chomp
     else
       # Otherwise, generate a string
-      length = args[1] || 32
-      # We use all ASCII values 32 through 126, excluding a few: ' " # /
-      characters = (32..126).to_a - [35, 34, 39, 47]
-
       require 'securerandom'
-      password = SecureRandom.random_bytes(length).each_char.map do |char|
+      if args[1] == nil
+        length=32
+      else
+        length=args[1].to_i
+      end
+      if args[2] == nil
+        sr_method = 'legacy'
+      else
+        sr_method = args[2]
+      end
+      if sr_method == 'legacy'
+        # We use all ASCII values 32 through 126, excluding a few: ' " # /
+        characters = (32..126).to_a - [35, 34, 39, 47]
+        password = SecureRandom.random_bytes(length).each_char.map do |char|
+          begin
+            character_code = char.ord
+          rescue NoMethodError # For Ruby 1.8 compatibility, which stock puppet on RHEL runs on :(
+            character_code = char[0]
+          end
+          characters[(character_code % characters.length)].chr
+        end.join
+      else
         begin
-          character_code = char.ord
-        rescue NoMethodError # For Ruby 1.8 compatibility, which stock puppet on RHEL runs on :(
-          character_code = char[0]
+            password = SecureRandom.send(sr_method,length)
+        rescue NoMethodError # They specified a SecureRandom method that doesn't exist
+          raise NoMethodError, "Please see You have specified a SecureRandom method that doesn't exist"
         end
-        characters[(character_code % characters.length)].chr
-      end.join
+      end
 
       # Save the generated string to a file so that it's the same in subsequent
       # calls (assuming the same index)
@@ -60,7 +76,9 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
 
       # And return the value so that the puppet variable/parameter is, of
       # course, set.
+      p password
       password
     end
   end
 end
+

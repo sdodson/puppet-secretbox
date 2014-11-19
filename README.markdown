@@ -56,6 +56,13 @@ is stored in a directory named after the FQDN. This directory is then stored
 within the 'secretbox' directory, underneath Puppet's 'vardir'. In practice,
 a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
 
+A third parameter may be used to determine which
+[SecureRandom](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/securerandom/rdoc/SecureRandom.html) method to invoke.
+This is useful if you need to constrain the character set.
+
+    $mysql_root_password = secretbox('mysql_root_password',32,'base64')
+
+
 - *Type*: rvalue
 
 ## Limitations

@@ -55,13 +55,6 @@ describe 'the secretbox function' do
     expect(value_1).to eq('look ma a space ')
   end
 
-  it 'should generate strict base64 strings' do
-    value_1 = secretbox_length_method('base64_test', 32, 'base64')
-    value_2 = secretbox_length_method('base64_test', 9, 'base64')
-    Base64.strict_decode64(value_1)
-    Base64.strict_decode64(value_2)
-  end
-
   it 'should generate proper base64 string with length specified ' do
     # ruby1.8.7 doesn't include strict_decode64 but lets assume if the length of the decoded string
     # is what we asked for it's all good

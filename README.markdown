@@ -1,5 +1,5 @@
 # secretbox
-[![Build Status](https://travis-ci.org/evaryont/puppet-secretbox.png?branch=master)](https://travis-ci.org/evaryont/puppet-secretbox)
+[![Build Status](https://travis-ci.org/sdodson/puppet-secretbox.png?branch=master)](https://travis-ci.org/sdodson/puppet-secretbox)
 
 ## Overview
 
@@ -70,4 +70,4 @@ puppet should be fine, as `/var/lib/puppet` is already protected.
 Pull requests are appreciated. If you do want to contribute to this project,
 make sure all tests pass. Also, be kinder rather than meaner.
 
-[secretbox]: https://github.com/evaryont/puppet-secretbox
+[secretbox]: https://github.com/sdodson/puppet-secretbox

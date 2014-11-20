@@ -39,12 +39,12 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
     else
       # Otherwise, generate a string
       require 'securerandom'
-      if args[1] == nil
+      if args.nil?
         length = 32
       else
         length = args[1].to_i
       end
-      if args[2] == nil
+      if args[2].nil?
         sr_method = 'legacy'
       else
         sr_method = args[2]

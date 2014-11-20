@@ -76,7 +76,6 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
 
       # And return the value so that the puppet variable/parameter is, of
       # course, set.
-      p password
       password
     end
   end

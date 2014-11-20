@@ -64,7 +64,7 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
         begin
           password = SecureRandom.send(sr_method, length)
         rescue NoMethodError # They specified a SecureRandom method that doesn't exist
-          raise NoMethodError, "Please see You have specified a SecureRandom method that doesn't exist"
+          raise NoMethodError, "You have specified a SecureRandom method that doesn't exist"
         end
       end
 

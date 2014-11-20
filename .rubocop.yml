@@ -6,6 +6,7 @@ AllCops:
     - bin/**/*
     - manifests/**/*
     - spec/fixtures/**/*
+    - pkg/**/*
 
 LineLength:
   Max: 120
@@ -16,7 +17,5 @@ HashSyntax:
 Lambda:
   Enabled: false
 
-NilComparison:
-  Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false

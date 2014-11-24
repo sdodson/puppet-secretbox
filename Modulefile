@@ -1,5 +1,5 @@
 name          'sdodson-secretbox'
-version '0.1.2'
+version '0.1.4'
 source        'https://github.com/sdodson/puppet-secretbox'
 author        'evaryont,sdodson'
 license       'Apache License, Version 2.0'

@@ -1,3 +1,6 @@
+require 'fileutils'
+require 'securerandom'
+
 # Define the secretbox method; see README for more information and usage.
 module Puppet::Parser::Functions
   newfunction(:secretbox, :type => :rvalue, :doc => <<-eodoc) do |args|
@@ -29,7 +32,6 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
 
     # Make the directory if it doesn't already exist.
     unless File.directory? persistance_dir
-      require 'fileutils'
       FileUtils.mkdir_p persistance_dir
     end
 
@@ -38,7 +40,6 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
       open(persistance_file).read.chomp
     else
       # Otherwise, generate a string
-      require 'securerandom'
       if args.nil?
         length = 32
       else

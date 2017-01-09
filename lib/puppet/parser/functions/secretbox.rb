@@ -51,8 +51,8 @@ a given index has it's value stored in `/var/lib/puppet/secretbox/FQDN/index`.
         sr_method = args[2]
       end
       if sr_method == 'legacy'
-        # We use all ASCII values 32 through 126, excluding a few: ' " # /
-        characters = (32..126).to_a - [35, 34, 39, 47]
+        # We use all ASCII values 32 through 126, excluding a few: ' " # / \
+        characters = (32..126).to_a - [35, 34, 39, 47, 92]
         password = SecureRandom.random_bytes(length).each_char.map do |char|
           begin
             character_code = char.ord
